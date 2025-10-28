@@ -17,7 +17,29 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
     });
-    Route::apiResource('events', EventController::class);
-    Route::apiResource('venues', VenueController::class);
-    Route::apiResource('computers', \App\Http\Controllers\ComputerController::class);
+    
+    // API Resources con nombres únicos
+    Route::apiResource('events', EventController::class)->names([
+        'index' => 'api.events.index',
+        'store' => 'api.events.store', 
+        'show' => 'api.events.show',
+        'update' => 'api.events.update',
+        'destroy' => 'api.events.destroy'
+    ]);
+    
+    Route::apiResource('venues', VenueController::class)->names([
+        'index' => 'api.venues.index',
+        'store' => 'api.venues.store',
+        'show' => 'api.venues.show', 
+        'update' => 'api.venues.update',
+        'destroy' => 'api.venues.destroy'
+    ]);
+    
+    Route::apiResource('computers', \App\Http\Controllers\ComputerController::class)->names([
+        'index' => 'api.computers.index',
+        'store' => 'api.computers.store',
+        'show' => 'api.computers.show',
+        'update' => 'api.computers.update', 
+        'destroy' => 'api.computers.destroy'
+    ]);
 });
