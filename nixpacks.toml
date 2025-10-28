@@ -5,12 +5,18 @@ nixPkgs = ['nodejs_18', 'php82']
 [phases.install]
 cmds = [
     'composer install --optimize-autoloader --no-dev --no-scripts --no-interaction',
-    'rm -rf node_modules/.vite node_modules/.cache || true',
-    'npm ci --legacy-peer-deps'
+    'npm cache clean --force || true',
+    'rm -rf node_modules package-lock.json || true',
+    'npm install --legacy-peer-deps --no-audit --no-fund'
 ]
 
 [phases.build]
-cmds = ['npm run build']
+cmds = [
+    'npm run build',
+    'php artisan config:cache || true',
+    'php artisan route:cache || true',
+    'php artisan view:cache || true'
+]
 
 [start]
 cmd = 'php artisan serve --host=0.0.0.0 --port=$PORT'
