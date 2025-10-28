@@ -1,15 +1,16 @@
+# nixpacks.toml
 [phases.setup]
-nixPkgs = ["...", "php81", "nodejs-18_x", "nginx"]
+nixPkgs = ['nodejs_18', 'php82']
 
-[phases.build]
+[phases.install]
 cmds = [
-    "composer install --optimize-autoloader --no-dev --no-scripts --no-interaction",
-    "npm ci --legacy-peer-deps",
-    "npm run build",
-    "php artisan config:cache",
-    "php artisan route:cache",
-    "php artisan view:cache"
+    'composer install --optimize-autoloader --no-dev --no-scripts --no-interaction',
+    'rm -rf node_modules/.vite node_modules/.cache || true',
+    'npm ci --legacy-peer-deps'
 ]
 
+[phases.build]
+cmds = ['npm run build']
+
 [start]
-cmd = "php artisan serve --host=0.0.0.0 --port=$PORT"
+cmd = 'php artisan serve --host=0.0.0.0 --port=$PORT'
