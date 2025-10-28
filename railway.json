@@ -1,6 +1,6 @@
 {
   "build": {
-    "buildCommand": "composer install --optimize-autoloader --no-dev && npm ci && npm run build"
+    "buildCommand": "composer install --optimize-autoloader --no-dev --no-scripts --no-interaction && npm ci --legacy-peer-deps && npm run build"
   },
   "deploy": {
     "startCommand": "php artisan serve --host=0.0.0.0 --port=$PORT"

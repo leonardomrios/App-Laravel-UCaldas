@@ -13,7 +13,7 @@ composer install --optimize-autoloader --no-dev --no-scripts --no-interaction --
 
 # Instalar dependencias Node.js
 echo "📦 Instalando dependencias Node.js..."
-npm ci --only=production
+npm ci --legacy-peer-deps
 
 # Construir assets
 echo "🏗️ Construyendo assets..."
