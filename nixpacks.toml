@@ -1,13 +1,14 @@
 # nixpacks.toml
 [phases.setup]
-nixPkgs = ['nodejs_18', 'php82']
+nixPkgs = ['nodejs_20', 'php82']
 
 [phases.install]
 cmds = [
     'composer install --optimize-autoloader --no-dev --no-scripts --no-interaction',
     'npm cache clean --force || true',
     'rm -rf node_modules package-lock.json || true',
-    'npm install --legacy-peer-deps --no-audit --no-fund'
+    'npm install --legacy-peer-deps --no-audit --no-fund',
+    'npm install @rollup/rollup-linux-x64-gnu --save-optional --legacy-peer-deps || true'
 ]
 
 [phases.build]
