@@ -1,0 +1,19 @@
+# nixpacks.toml - Versión simplificada
+[phases.setup]
+nixPkgs = ['nodejs_20', 'php82']
+
+[phases.install]
+cmds = [
+    'composer install --optimize-autoloader --no-dev --no-scripts --no-interaction',
+    'npm cache clean --force || true',
+    'rm -rf node_modules package-lock.json || true',
+    'npm install --legacy-peer-deps --no-audit --no-fund --include=optional'
+]
+
+[phases.build]
+cmds = [
+    'npm run build'
+]
+
+[start]
+cmd = 'php artisan serve --host=0.0.0.0 --port=$PORT'

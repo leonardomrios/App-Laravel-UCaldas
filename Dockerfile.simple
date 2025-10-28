@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y \
     ca-certificates \
     gnupg
 
-# Install Node.js 20 (más estable para Rollup)
+# Install Node.js 20
 RUN curl -fsSL https://deb.nodesource.com/gpgkey/nodesource-repo.gpg.key | gpg --dearmor -o /etc/apt/keyrings/nodesource.gpg && \
     echo "deb [signed-by=/etc/apt/keyrings/nodesource.gpg] https://deb.nodesource.com/node_20.x nodistro main" | tee /etc/apt/sources.list.d/nodesource.list && \
     apt-get update && \
@@ -30,26 +30,16 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Set working directory
 WORKDIR /app
 
-# Copy composer files
+# Copy and install composer dependencies
 COPY composer.json composer.lock ./
-
-# Install dependencies
 RUN composer install --optimize-autoloader --no-dev --no-scripts --no-interaction
 
-# Copy package.json files
-COPY package.json package-lock.json ./
+# Copy package.json and install node dependencies
+COPY package.json ./
+COPY .npmrc ./
 
-# Configure npm
-RUN npm config set cache /tmp/.npm --global && \
-    npm config set audit false --global && \
-    npm config set fund false --global
-
-# Clean any existing installations
-RUN rm -rf node_modules package-lock.json || true
-
-# Install npm dependencies with explicit rollup binaries
-RUN npm install --legacy-peer-deps --no-audit --no-fund --include=optional && \
-    npm install @rollup/rollup-linux-x64-gnu --save-optional --legacy-peer-deps
+# Install npm dependencies
+RUN npm install --legacy-peer-deps --no-audit --no-fund --include=optional
 
 # Copy application code
 COPY . .
@@ -57,14 +47,8 @@ COPY . .
 # Build assets
 RUN npm run build
 
-# Clear any existing caches and optimize Laravel
-RUN php artisan config:clear || true
-RUN php artisan route:clear || true  
-RUN php artisan view:clear || true
-RUN php artisan cache:clear || true
-RUN php artisan config:cache || echo "Config cache failed, continuing..."
-RUN php artisan route:cache || echo "Route cache failed, continuing..."
-RUN php artisan view:cache || echo "View cache failed, continuing..."
+# Minimal optimization (skip cache commands that might fail)
+RUN touch storage/logs/laravel.log || true
 
 EXPOSE $PORT
 
