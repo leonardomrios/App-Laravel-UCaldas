@@ -18,11 +18,10 @@ rm -rf node_modules package-lock.json || true
 echo "⚙️ Configurando npm para Linux x64..."
 npm config set target_platform linux
 npm config set target_arch x64
-npm config set optional true
 
 # Instalar dependencias con manejo específico de Rollup
 echo "📦 Instalando dependencias Node.js..."
-npm install --legacy-peer-deps --no-audit --no-fund
+npm install --legacy-peer-deps --no-audit --no-fund --include=optional
 
 # Instalar específicamente el binario de Rollup para Linux
 echo "🔧 Instalando binario Rollup para Linux..."

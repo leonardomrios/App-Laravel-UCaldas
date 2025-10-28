@@ -42,14 +42,13 @@ COPY package.json package-lock.json ./
 # Configure npm
 RUN npm config set cache /tmp/.npm --global && \
     npm config set audit false --global && \
-    npm config set fund false --global && \
-    npm config set optional false --global
+    npm config set fund false --global
 
 # Clean any existing installations
 RUN rm -rf node_modules package-lock.json || true
 
 # Install npm dependencies with explicit rollup binaries
-RUN npm install --legacy-peer-deps --no-audit --no-fund --no-optional && \
+RUN npm install --legacy-peer-deps --no-audit --no-fund --include=optional && \
     npm install @rollup/rollup-linux-x64-gnu --save-optional --legacy-peer-deps
 
 # Copy application code

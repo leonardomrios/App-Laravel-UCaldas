@@ -7,7 +7,7 @@ cmds = [
     'composer install --optimize-autoloader --no-dev --no-scripts --no-interaction',
     'npm cache clean --force || true',
     'rm -rf node_modules package-lock.json || true',
-    'npm install --legacy-peer-deps --no-audit --no-fund',
+    'npm install --legacy-peer-deps --no-audit --no-fund --include=optional',
     'npm install @rollup/rollup-linux-x64-gnu --save-optional --legacy-peer-deps || true'
 ]
 
