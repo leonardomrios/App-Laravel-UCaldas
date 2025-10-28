@@ -17,10 +17,9 @@ class VenueFactory extends Factory
     public function definition(): array
     {
         return [
-            'venue_name' => fake()->company,
-            'venue_max_capacity' => fake()->numberBetween(50, 1000),
-            'venue_address' => fake()->address,
-            'venue_status' => fake()->boolean(80),
+            'venue_name' => fake()->company(),
+            'venue_address' => fake()->address(),
+            'venue_max_capacity' => fake()->numberBetween(1, 40000),
         ];
     }
 }

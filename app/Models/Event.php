@@ -12,10 +12,19 @@ class Event extends Model
     protected $fillable = [
         'event_name',
         'event_date',
-        'event_max_capacity',
-        'event_speaker_name',
-        'event_location_name',
-        'event_meetup_url',
         'event_is_virtual',
+        'event_speaker_name',
+        'fk_venue_event',
+        'event_image',
     ];
+
+    protected $casts = [
+        'event_date' => 'datetime',
+        'event_is_virtual' => 'boolean',
+    ];
+
+    public function venue()
+    {
+        return $this->belongsTo(Venue::class, 'fk_venue_event');
+    }
 }

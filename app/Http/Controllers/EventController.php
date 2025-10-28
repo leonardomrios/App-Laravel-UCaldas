@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\EventRequest;
 use App\Models\Event;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class EventController extends Controller
 {
@@ -13,7 +14,7 @@ class EventController extends Controller
      */
     public function index()
     {
-        return Event::all();
+        return Event::with('venue')->get();
     }
 
     /**
@@ -26,6 +27,11 @@ class EventController extends Controller
         $event->event_date = $request->input('event_date');
         $event->event_max_capacity = $request->input('event_max_capacity');
         $event->event_is_virtual = $request->input('event_is_virtual');
+
+        if ($request->hasFile('event_image')) {
+            $event->event_image = $request->file('event_image')->store('events', 'public');
+        }
+
         $event->save();
 
         return $event;
@@ -44,7 +50,17 @@ class EventController extends Controller
      */
     public function update(Request $request, Event $event)
     {
-        if ($event->update($request->all())) {
+        $data = $request->all();
+
+        if ($request->hasFile('event_image')) {
+            // Eliminar imagen anterior si existe
+            if ($event->event_image) {
+                Storage::disk('public')->delete($event->event_image);
+            }
+            $data['event_image'] = $request->file('event_image')->store('events', 'public');
+        }
+
+        if ($event->update($data)) {
             return response()->json(['success' => true, 'event' => $event]);
         }
         return response()->json(['success' => false]);
