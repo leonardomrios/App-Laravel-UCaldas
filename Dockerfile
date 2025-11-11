@@ -66,6 +66,6 @@ RUN php artisan config:cache || echo "Config cache failed, continuing..."
 RUN php artisan route:cache || echo "Route cache failed, continuing..."
 RUN php artisan view:cache || echo "View cache failed, continuing..."
 
-EXPOSE $PORT
+EXPOSE 8000
 
-CMD php artisan serve --host=0.0.0.0 --port=$PORT
+CMD php artisan serve --host=0.0.0.0 --port=${PORT:-8000}
